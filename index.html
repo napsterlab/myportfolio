@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ilyas Madouni — Network & Security Engineer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #050a0f;
+      --surface: #0a1520;
+      --surface2: #0f1e2e;
+      --accent: #00e5ff;
+      --accent2: #00ff88;
+      --accent3: #ff4b6e;
+      --text: #c8dae8;
+      --text-dim: #5a7a92;
+      --border: rgba(0,229,255,0.15);
+      --mono: 'Share Tech Mono', monospace;
+      --sans: 'Syne', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* Scanline overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px);
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Grid background */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 3rem;
+      background: rgba(5,10,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--mono);
+      color: var(--accent);
+      font-size: 1rem;
+      letter-spacing: 2px;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* HERO */
+    #hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 6rem 3rem 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .hero-tag {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--accent);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.2s forwards;
+    }
+    .hero-name {
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -2px;
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.4s forwards;
+    }
+    .hero-name span { color: var(--accent); }
+    .hero-tagline {
+      font-family: var(--mono);
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      color: var(--text-dim);
+      margin-bottom: 2rem;
+      max-width: 600px;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.6s forwards;
+    }
+    .hero-tagline .highlight { color: var(--accent2); }
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.8s forwards;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.75rem;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+      font-weight: 700;
+    }
+    .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); }
+    .btn-outline {
+      border: 1px solid var(--accent);
+      color: var(--accent);
+    }
+    .btn-outline:hover { background: rgba(0,229,255,0.1); transform: translateY(-2px); }
+
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 4rem;
+      opacity: 0;
+      animation: fadeUp 0.6s 1s forwards;
+    }
+    .stat { text-align: left; }
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+      font-family: var(--mono);
+    }
+    .stat-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* SECTIONS */
+    section {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 5rem 3rem;
+    }
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    h2 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      margin-bottom: 3rem;
+      color: #fff;
+    }
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      margin-bottom: 3rem;
+      margin-top: -2.5rem;
+    }
+
+    /* ABOUT */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .about-text p {
+      margin-bottom: 1.2rem;
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+    .about-text p strong { color: var(--accent); }
+    .about-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2rem;
+    }
+    .about-card h3 {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .info-row {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      align-items: flex-start;
+    }
+    .info-icon { color: var(--accent2); font-size: 1rem; min-width: 20px; }
+    .info-text { font-family: var(--mono); font-size: 0.82rem; color: var(--text); }
+    .info-text a { color: var(--accent); text-decoration: none; }
+
+    /* SKILLS */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+    .skill-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.75rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .skill-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+    .skill-card h3 {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tag {
+      background: rgba(0,229,255,0.08);
+      border: 1px solid rgba(0,229,255,0.2);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 2px;
+      transition: all 0.2s;
+    }
+    .tag:hover { background: rgba(0,229,255,0.18); color: var(--accent); border-color: var(--accent); }
+    .tag.green { background: rgba(0,255,136,0.08); border-color: rgba(0,255,136,0.2); }
+    .tag.green:hover { background: rgba(0,255,136,0.18); color: var(--accent2); }
+    .tag.red { background: rgba(255,75,110,0.08); border-color: rgba(255,75,110,0.2); }
+
+    /* EXPERIENCE */
+    .exp-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 4px 4px 0;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .exp-title { font-size: 1.2rem; font-weight: 700; color: #fff; }
+    .exp-company { color: var(--accent); font-family: var(--mono); font-size: 0.9rem; }
+    .exp-date {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      background: var(--surface2);
+      padding: 0.3rem 0.75rem;
+      border-radius: 2px;
+      border: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .exp-sub {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--accent2);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 1.25rem 0 0.5rem;
+    }
+    .exp-list { list-style: none; padding: 0; }
+    .exp-list li {
+      padding: 0.35rem 0 0.35rem 1.25rem;
+      position: relative;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    .exp-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+    .impact-box {
+      margin-top: 1rem;
+      background: rgba(0,255,136,0.05);
+      border: 1px solid rgba(0,255,136,0.2);
+      border-radius: 3px;
+      padding: 0.75rem 1rem;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--accent2);
+    }
+    .impact-box strong { color: var(--accent2); }
+
+    /* PROJECTS */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.75rem;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .project-card:hover { border-color: rgba(0,229,255,0.4); transform: translateY(-5px); }
+    .project-card:hover::before { transform: scaleX(1); }
+    .project-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .project-date {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-bottom: 0.75rem;
+    }
+    .project-title { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem; }
+    .project-subtitle { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); margin-bottom: 1rem; }
+    .project-desc { font-size: 0.88rem; color: var(--text); line-height: 1.7; margin-bottom: 1.25rem; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .project-tag {
+      background: rgba(0,229,255,0.07);
+      border: 1px solid rgba(0,229,255,0.15);
+      color: var(--text-dim);
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 2px;
+    }
+
+    /* EDUCATION */
+    .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .edu-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+    .edu-card:hover { border-color: var(--accent); }
+    .edu-degree { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 0.3rem; }
+    .edu-school { font-family: var(--mono); font-size: 0.78rem; color: var(--accent); margin-bottom: 0.5rem; }
+    .edu-period {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      background: var(--surface2);
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
+    }
+    .cert-list { list-style: none; }
+    .cert-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+      gap: 1rem;
+    }
+    .cert-item:last-child { border-bottom: none; }
+    .cert-name { font-size: 0.88rem; color: var(--text); }
+    .cert-name strong { color: #fff; }
+    .cert-issuer { font-family: var(--mono); font-size: 0.72rem; color: var(--accent); display: block; margin-top: 0.15rem; }
+    .cert-date {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+
+    /* CONTACT */
+    #contact {
+      text-align: center;
+      padding: 5rem 3rem 6rem;
+    }
+    .contact-grid {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-top: 2.5rem;
+    }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1rem 1.75rem;
+      text-decoration: none;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      transition: all 0.2s;
+    }
+    .contact-link:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-3px); }
+    .contact-icon { font-size: 1.2rem; }
+
+    /* FOOTER */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+    footer span { color: var(--accent); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s, transform 0.6s;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* TERMINAL BLINK */
+    .cursor {
+      display: inline-block;
+      width: 3px;
+      height: 1em;
+      background: var(--accent);
+      margin-left: 4px;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      #hero, section { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .about-grid, .edu-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">ilyas@madouni:~$</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <p class="hero-tag">// Network &amp; Cybersecurity Engineer</p>
+    <h1 class="hero-name">Ilyas<br/><span>Madouni</span></h1>
+    <p class="hero-tagline">
+      Building secure networks &amp; breaking vulnerable ones —<br/>
+      <span class="highlight">Future security engineer, current IT engineering student.</span>
+    </p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">View Projects</a>
+      <a href="#contact" class="btn btn-outline">Get in Touch</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">4+</div>
+        <div class="stat-label">Security Projects</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">11</div>
+        <div class="stat-label">CVEs Detected</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">0%</div>
+        <div class="stat-label">Packet Loss @ AFCON</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Certifications</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <p class="section-label">// 01. about_me</p>
+    <h2>Who I Am</h2>
+    <div class="divider"></div>
+    <div class="about-grid reveal">
+      <div class="about-text">
+        <p>I'm a passionate IT engineering student specializing in <strong>Intelligent Communicating &amp; Mobile Systems</strong> at FST Fès, Morocco. My world revolves around networks, security protocols, and building systems that are both resilient and hard to break into.</p>
+        <p>What drives me isn't just the technical challenge — it's knowing that the firewalls I configure, the vulnerabilities I scan for, and the encrypted streams I architect are what keep data and people safe. I got my first real taste of this during my internship at <strong>SNRT Morocco</strong>, where I deployed production-grade firewall infrastructure and helped broadcast AFCON 2025 in live HD with zero packet loss.</p>
+        <p>When I'm not building cybersecurity tools or digging through network traffic, I'm spinning up Docker labs, chasing CVEs, or creating tools that scratch an itch no existing solution quite managed to reach. I'm actively seeking an <strong>internship in network security</strong> where I can bring this energy into a professional team.</p>
+      </div>
+      <div class="about-card">
+        <h3>// quick_info.json</h3>
+        <div class="info-row">
+          <span class="info-icon">📍</span>
+          <span class="info-text">Rabat, Morocco</span>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">🎓</span>
+          <span class="info-text">Engineering Student @ FST Fès</span>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">🔐</span>
+          <span class="info-text">Focus: Network Security &amp; Cybersecurity</span>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">📧</span>
+          <span class="info-text"><a href="mailto:madouni2004@gmail.com">madouni2004@gmail.com</a></span>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">💼</span>
+          <span class="info-text"><a href="https://linkedin.com/in/ilyas-madouni" target="_blank">linkedin.com/in/ilyas-madouni</a></span>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">🌍</span>
+          <span class="info-text">Arabic · French · English</span>
+        </div>
+        <div class="info-row">
+          <span class="info-icon">🟢</span>
+          <span class="info-text" style="color: var(--accent2)">Open to internships</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <p class="section-label">// 02. skills</p>
+    <h2>Technical Arsenal</h2>
+    <div class="divider"></div>
+    <div class="skills-grid reveal">
+      <div class="skill-card">
+        <h3>⚙️ Programming</h3>
+        <div class="tag-list">
+          <span class="tag">Python</span>
+          <span class="tag">C</span>
+          <span class="tag">C++</span>
+          <span class="tag">SQL</span>
+          <span class="tag">HTML</span>
+          <span class="tag">CSS</span>
+          <span class="tag">JavaScript</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h3>🧩 Frameworks &amp; Libraries</h3>
+        <div class="tag-list">
+          <span class="tag green">Flask</span>
+          <span class="tag green">Django</span>
+          <span class="tag green">Scapy</span>
+          <span class="tag green">WebSockets</span>
+          <span class="tag green">FFmpeg</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h3>🔐 Networking &amp; Security</h3>
+        <div class="tag-list">
+          <span class="tag">TCP/IP</span>
+          <span class="tag">UDP</span>
+          <span class="tag">IPv4</span>
+          <span class="tag">VPN</span>
+          <span class="tag">OpenVPN</span>
+          <span class="tag">VLAN</span>
+          <span class="tag">DNS</span>
+          <span class="tag">DHCP</span>
+          <span class="tag">AES-256</span>
+          <span class="tag">RSA</span>
+          <span class="tag">CARP</span>
+          <span class="tag">SRT</span>
+          <span class="tag">pfSense</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h3>🛠️ Tools &amp; Platforms</h3>
+        <div class="tag-list">
+          <span class="tag red">Docker</span>
+          <span class="tag red">Kali Linux</span>
+          <span class="tag red">Nmap</span>
+          <span class="tag red">VMware</span>
+          <span class="tag red">VirtualBox</span>
+          <span class="tag red">Cisco Packet Tracer</span>
+          <span class="tag red">AWS</span>
+          <span class="tag red">Git</span>
+          <span class="tag red">Power BI</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <p class="section-label">// 03. experience</p>
+    <h2>Professional Experience</h2>
+    <div class="divider"></div>
+    <div class="reveal">
+      <div class="exp-item">
+        <div class="exp-header">
+          <div>
+            <div class="exp-title">Network &amp; Security Engineer Intern</div>
+            <div class="exp-company">🏢 SNRT Morocco — Rabat</div>
+          </div>
+          <span class="exp-date">July – September 2025</span>
+        </div>
+
+        <p class="exp-sub">pfSense Firewall Deployment</p>
+        <ul class="exp-list">
+          <li>Conducted a comparative study of firewall solutions (pfSense, Sophos, Fortinet) with full technical justification</li>
+          <li>Configured VMware environment end-to-end: OpenVPN, Captive Portal, DHCP services</li>
+          <li>Implemented CARP (Common Address Redundancy Protocol) for high-availability failover</li>
+          <li>Performed end-to-end security validation across the deployed infrastructure</li>
+        </ul>
+        <div class="impact-box">🎯 <strong>Impact:</strong> Delivered a production-ready, fault-tolerant firewall architecture — a meaningful upgrade to SNRT's network security posture.</div>
+
+        <p class="exp-sub" style="margin-top:1.5rem">SRT Protocol — AFCON 2025 Live Broadcasting</p>
+        <ul class="exp-list">
+          <li>Analyzed HD/4K audiovisual streams with AES-256 encryption via FFmpeg</li>
+          <li>Achieved latency &lt;150ms, 0% packet loss, and stable Full HD quality throughout the tournament</li>
+        </ul>
+        <div class="impact-box">🎯 <strong>Impact:</strong> Contributed to flawless live broadcasting of one of Africa's biggest football tournaments to millions of viewers.</div>
+
+        <div class="tag-list" style="margin-top:1.5rem">
+          <span class="tag">pfSense</span><span class="tag">VMware</span><span class="tag">VPN</span>
+          <span class="tag">DHCP</span><span class="tag">SRT</span><span class="tag">FFmpeg</span>
+          <span class="tag">AES-256</span><span class="tag">CARP</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <p class="section-label">// 04. projects</p>
+    <h2>Featured Projects</h2>
+    <div class="divider"></div>
+    <div class="projects-grid reveal">
+
+      <div class="project-card">
+        <div class="project-icon">🔍</div>
+        <div class="project-date">January 2026</div>
+        <div class="project-title">VulnScanner</div>
+        <div class="project-subtitle">Network Vulnerability Scanner</div>
+        <div class="project-desc">Modular Python scanner detecting 11 CVEs in under 3 minutes. Features a real-time WebSocket dashboard, Flask REST API, Docker deployment, and multi-format reports (HTML, PDF, JSON) across an 18-module architecture.</div>
+        <div class="project-tags">
+          <span class="project-tag">Python</span><span class="project-tag">Scapy</span>
+          <span class="project-tag">Flask</span><span class="project-tag">Docker</span>
+          <span class="project-tag">Nmap</span><span class="project-tag">SQLite</span>
+          <span class="project-tag">WebSockets</span><span class="project-tag">CVE</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">📡</div>
+        <div class="project-date">February – March 2026</div>
+        <div class="project-title">Network Sniffer</div>
+        <div class="project-subtitle">Real-Time Traffic Analyzer</div>
+        <div class="project-desc">8 capture modes (HTTP/HTTPS, DNS, SMTP) with automatic anomaly detection for port scans, SYN floods, and DDoS patterns. Generates professional JSON/CSV reports with deep TCP/IP protocol analysis.</div>
+        <div class="project-tags">
+          <span class="project-tag">Python</span><span class="project-tag">Scapy</span>
+          <span class="project-tag">Network Security</span><span class="project-tag">Packet Analysis</span>
+          <span class="project-tag">Threat Detection</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">🐳</div>
+        <div class="project-date">September 2025</div>
+        <div class="project-title">Docker Nmap Lab</div>
+        <div class="project-subtitle">Cybersecurity Training Environment</div>
+        <div class="project-desc">8-container isolated lab with Kali Linux + 7 deliberately vulnerable services (DVWA, WebGoat, MySQL, SSH…). Fully automated via Docker Compose and Bash/PowerShell for 100% reproducible pentest environments.</div>
+        <div class="project-tags">
+          <span class="project-tag">Docker</span><span class="project-tag">Kali Linux</span>
+          <span class="project-tag">Nmap</span><span class="project-tag">Bash</span>
+          <span class="project-tag">Penetration Testing</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">💬</div>
+        <div class="project-date">April – May 2025</div>
+        <div class="project-title">AirChat</div>
+        <div class="project-subtitle">Serverless P2P Chat Application (LAN)</div>
+        <div class="project-desc">Privacy-first P2P messaging over UDP multicast — no central server, no logs, no middleman. Features end-to-end RSA/AES encryption with direct file transfer and integrity verification across local networks.</div>
+        <div class="project-tags">
+          <span class="project-tag">Python</span><span class="project-tag">Flask</span>
+          <span class="project-tag">UDP</span><span class="project-tag">RSA/AES</span>
+          <span class="project-tag">JavaScript</span><span class="project-tag">Sockets</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <p class="section-label">// 05. education &amp; certs</p>
+    <h2>Education &amp; Certifications</h2>
+    <div class="divider"></div>
+    <div class="reveal">
+      <div class="edu-grid" style="margin-bottom:3rem">
+        <div class="edu-card">
+          <div class="edu-degree">🎓 Engineering Degree</div>
+          <div class="edu-school">Intelligent Communicating &amp; Mobile Systems</div>
+          <div style="font-size:0.82rem;color:var(--text-dim);margin-bottom:0.5rem">Faculté des Sciences et Techniques – FST Fès</div>
+          <span class="edu-period">2024 – Present</span>
+        </div>
+        <div class="edu-card">
+          <div class="edu-degree">📚 Preparatory Class — TSI Track</div>
+          <div class="edu-school">Classes Préparatoires aux Grandes Écoles</div>
+          <div style="font-size:0.82rem;color:var(--text-dim);margin-bottom:0.5rem">CPGE Settat</div>
+          <span class="edu-period">2022 – 2024</span>
+        </div>
+        <div class="edu-card">
+          <div class="edu-degree">🏫 Technical Baccalaureate</div>
+          <div class="edu-school">Sciences &amp; Technologies</div>
+          <div style="font-size:0.82rem;color:var(--text-dim);margin-bottom:0.5rem">Lycée Qualifiant Technique, Errachidia</div>
+          <span class="edu-period">2021 – 2022</span>
+        </div>
+      </div>
+
+      <p class="section-label" style="margin-bottom:1.5rem">// certifications</p>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:0 1.75rem">
+        <ul class="cert-list">
+          <li class="cert-item">
+            <div class="cert-name">
+              <strong>🐍 Certified Entry-Level Python Programmer (PCEP)</strong>
+              <span class="cert-issuer">Cisco Networking Academy</span>
+            </div>
+            <span class="cert-date">Aug 2024</span>
+          </li>
+          <li class="cert-item">
+            <div class="cert-name">
+              <strong>🤖 Artificial Intelligence for Development</strong>
+              <span class="cert-issuer">Atingi eLearning</span>
+            </div>
+            <span class="cert-date">Sep 2024</span>
+          </li>
+          <li class="cert-item">
+            <div class="cert-name">
+              <strong>🇫🇷 DELF B2 — French Language Diploma</strong>
+              <span class="cert-issuer">Institut Français de Casablanca</span>
+            </div>
+            <span class="cert-date">Feb 2022</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" style="text-align:center">
+    <p class="section-label" style="text-align:center">// 06. contact</p>
+    <h2 style="text-align:center">Let's Connect</h2>
+    <div class="divider" style="margin:0 auto 2rem"></div>
+    <p style="max-width:500px;margin:0 auto 2.5rem;color:var(--text-dim);font-size:0.95rem">
+      I'm actively looking for internship opportunities in network security.<br/>
+      Got an interesting project or role? Let's talk.
+    </p>
+    <div class="contact-grid reveal">
+      <a href="mailto:madouni2004@gmail.com" class="contact-link">
+        <span class="contact-icon">📧</span>
+        madouni2004@gmail.com
+      </a>
+      <a href="https://linkedin.com/in/ilyas-madouni" target="_blank" class="contact-link">
+        <span class="contact-icon">💼</span>
+        linkedin.com/in/ilyas-madouni
+      </a>
+      <a href="https://github.com/ilyasmadouni" target="_blank" class="contact-link">
+        <span class="contact-icon">🐙</span>
+        github.com/ilyasmadouni
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Designed &amp; built by <span>Ilyas Madouni</span> · © 2025 · <span>Rabat, Morocco</span></p>
+    <p style="margin-top:0.4rem;font-size:0.65rem">"Security is not a product, but a process." — Bruce Schneier</p>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    }, { threshold: 0.1 });
+    reveals.forEach(r => observer.observe(r));
+  </script>
+
+</body>
+</html>
