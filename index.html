@@ -114,6 +114,7 @@
     .exp-list li::before { content: '▸'; position: absolute; left: 0; color: var(--accent); }
     .impact-box { margin-top: 1rem; background: rgba(0,255,136,0.05); border: 1px solid rgba(0,255,136,0.2); border-radius: 3px; padding: 0.75rem 1rem; font-family: var(--mono); font-size: 0.78rem; color: var(--accent2); }
     .impact-box strong { color: var(--accent2); }
+    .exp-badge { background: linear-gradient(135deg, var(--accent2), var(--accent)); color: var(--bg); font-family: var(--mono); font-size: 0.62rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 0.2rem 0.55rem; border-radius: 2px; margin-left: 0.6rem; vertical-align: middle; }
     .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
     .project-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1.75rem; transition: all 0.25s; position: relative; overflow: hidden; }
     .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transform: scaleX(0); transition: transform 0.3s; }
@@ -238,10 +239,11 @@
         <h3>🔐 Networking &amp; Security</h3>
         <div class="tag-list">
           <span class="tag">TCP/IP</span><span class="tag">UDP</span><span class="tag">IPv4</span>
-          <span class="tag">VPN</span><span class="tag">OpenVPN</span><span class="tag">VLAN</span>
-          <span class="tag">DNS</span><span class="tag">DHCP</span><span class="tag">AES-256</span>
-          <span class="tag">RSA</span><span class="tag">CARP</span><span class="tag">SRT</span>
-          <span class="tag">pfSense</span><span class="tag">Suricata</span><span class="tag">IDS/IPS</span>
+          <span class="tag">VPN</span><span class="tag">OpenVPN</span><span class="tag">WireGuard</span><span class="tag">IPsec</span>
+          <span class="tag">VLAN</span><span class="tag">DNS</span><span class="tag">DHCP</span><span class="tag">RADIUS</span>
+          <span class="tag">AES-256</span><span class="tag">RSA</span><span class="tag">CARP</span><span class="tag">SRT</span>
+          <span class="tag">pfSense</span><span class="tag">FortiGate</span><span class="tag">Suricata</span>
+          <span class="tag">IDS/IPS</span><span class="tag">ISO/IEC 27001</span>
         </div>
       </div>
       <div class="skill-card">
@@ -249,7 +251,7 @@
         <div class="tag-list">
           <span class="tag red">Docker</span><span class="tag red">Kali Linux</span><span class="tag red">Nmap</span>
           <span class="tag red">VMware</span><span class="tag red">VirtualBox</span><span class="tag red">Cisco Packet Tracer</span>
-          <span class="tag red">AWS</span><span class="tag red">Git</span><span class="tag red">Power BI</span>
+          <span class="tag red">AWS</span><span class="tag red">Microsoft Azure</span><span class="tag red">Git</span><span class="tag red">Power BI</span>
           <span class="tag red">Elasticsearch</span><span class="tag red">Kibana</span><span class="tag red">Filebeat</span>
         </div>
       </div>
@@ -261,6 +263,35 @@
     <h2>Professional Experience</h2>
     <div class="divider"></div>
     <div class="reveal">
+      <div class="exp-item">
+        <div class="exp-header">
+          <div>
+            <div class="exp-title">Security &amp; Cloud Engineer Intern<span class="exp-badge">Current</span></div>
+            <div class="exp-company">🏢 Groupe Barid Al-Maghrib (GBAM) — Rabat</div>
+          </div>
+          <span class="exp-date">July 2026 – Present</span>
+        </div>
+        <p class="exp-sub">On-Premises Infrastructure — FortiGate &amp; Network Security</p>
+        <ul class="exp-list">
+          <li>Designed and deployed a FortiGate firewall (FortiOS) with VLAN segmentation separating internal LAN and guest network traffic</li>
+          <li>Configured VPN services including a WireGuard site-to-site tunnel and an IPsec (IKEv1 + XAuth) remote access VPN authenticated via RADIUS</li>
+          <li>Deployed an ELK + Suricata IDS stack for network intrusion detection and log ingestion from the on-prem firewall</li>
+        </ul>
+        <p class="exp-sub" style="margin-top:1.5rem">Cloud Migration — Microsoft Azure</p>
+        <ul class="exp-list">
+          <li>Extended the on-premises architecture to Microsoft Azure, provisioning a virtual network, subnet, and cloud VM to establish a hybrid on-prem/cloud security infrastructure</li>
+          <li>Implemented Azure Monitor with a Log Analytics Workspace and Managed Identity for centralized logging and monitoring</li>
+          <li>Configured Entra ID app registration and least-privilege role-based access control</li>
+          <li>Drafting partial ISO/IEC 27001 compliance documentation alongside a formal LaTeX internship report</li>
+        </ul>
+        <div class="impact-box">🎯 <strong>Impact:</strong> Designing and partially implementing a hybrid on-premises/cloud security architecture bridging traditional firewall infrastructure with modern cloud-native security tooling.</div>
+        <div class="tag-list" style="margin-top:1.5rem">
+          <span class="tag">FortiGate</span><span class="tag">VLAN</span><span class="tag">WireGuard</span>
+          <span class="tag">IPsec</span><span class="tag">RADIUS</span><span class="tag">Microsoft Azure</span>
+          <span class="tag">Azure Monitor</span><span class="tag">Entra ID</span><span class="tag">ELK</span>
+          <span class="tag">Suricata</span><span class="tag">ISO/IEC 27001</span>
+        </div>
+      </div>
       <div class="exp-item">
         <div class="exp-header">
           <div>
@@ -382,7 +413,7 @@
           <div class="edu-degree">🎓 Engineering Degree</div>
           <div class="edu-school">Intelligent Communicating &amp; Mobile Systems</div>
           <div style="font-size:0.82rem;color:var(--text-dim);margin-bottom:0.5rem">Faculty of Sciences and Techniques – FST Fez</div>
-          <span class="edu-period">2024 – Present</span>
+          <span class="edu-period">2024 – 2026</span>
         </div>
         <div class="edu-card">
           <div class="edu-degree">📚 Preparatory Class — TSI Track</div>
@@ -402,7 +433,6 @@
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:0 1.75rem">
         <ul class="cert-list">
 
-          <!-- ✅ UPDATED: FortiGate Operator → Fortinet Certified Associate (FCA) — Avr. 2026 -->
           <li class="cert-item">
             <div class="cert-name">
               <strong>🔰 Fortinet Certified Associate — Cybersecurity (FCA)</strong>
